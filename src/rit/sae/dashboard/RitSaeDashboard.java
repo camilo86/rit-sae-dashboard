@@ -2,7 +2,7 @@ package rit.sae.dashboard;
 
 /**
  *
- * @author Camilo Gonzalez
+ * @author Camilo Gonzalez and Jon Turinese
  */
 public class RitSaeDashboard {
 
