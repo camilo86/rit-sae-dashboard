@@ -11,7 +11,7 @@ public class LaserRecieverListener implements IDataReceiveListener{
 
     @Override
     public void dataReceived(XBeeMessage xbeeMessage) {
-        System.out.println("Recieved: " + xbeeMessage.getData());
+        System.out.println("Recieved: " + new String(xbeeMessage.getData()));
     }
     
 }
