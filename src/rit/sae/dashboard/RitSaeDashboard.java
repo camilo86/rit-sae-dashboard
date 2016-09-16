@@ -10,7 +10,7 @@ import rit.sae.dashboard.dataListeners.LaserRecieverListener;
  */
 public class RitSaeDashboard {
 
-    private static final String PORT = "COM1";
+    private static final String PORT = "COM3";
     private static final int BAUD_RATE = 9600;
     
     /**
