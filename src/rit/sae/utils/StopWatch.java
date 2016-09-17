@@ -41,9 +41,15 @@ public class StopWatch {
     
     /**
      * Gets start and stop stopwatch values
-     * @return String represntation of stopwathc
+     * @return String represessntation of stopwatch
      */
     public String toString() {
         return "Start: " + this.startTime + ", Stop: " + this.stopTime;
+    }
+    
+    public void reset() {
+        this.startTime = System.currentTimeMillis();
+        this.stopTime = 0;
+    
     }
 }
