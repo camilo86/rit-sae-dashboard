@@ -8,6 +8,7 @@ public class StopWatch {
     
     private long startTime;
     private long stopTime;
+    private boolean isStarted;
     
     /**
      * Creates instance of StopWatch class
@@ -15,6 +16,7 @@ public class StopWatch {
     public StopWatch() {
         this.startTime = 0;
         this.stopTime = 0;
+        this.isStarted = false;
     }
     
     /**
@@ -22,6 +24,7 @@ public class StopWatch {
      */
     public void start() {
         this.startTime = System.currentTimeMillis();
+        this.isStarted = true;
     }
     
     /**
@@ -29,6 +32,17 @@ public class StopWatch {
      */
     public void stop() {
         this.stopTime = System.currentTimeMillis();
+        this.isStarted = false;
+    }
+    
+    /**
+     * Resets stopwatch and starts it again
+     */
+    public void reset() {
+        this.startTime = 0;
+        this.stopTime = 0;
+        this.isStarted = false;
+    
     }
     
     /**
@@ -41,15 +55,9 @@ public class StopWatch {
     
     /**
      * Gets start and stop stopwatch values
-     * @return String represessntation of stopwatch
+     * @return String representation of stopwatch
      */
     public String toString() {
-        return "Start: " + this.startTime + ", Stop: " + this.stopTime;
-    }
-    
-    public void reset() {
-        this.startTime = System.currentTimeMillis();
-        this.stopTime = 0;
-    
+        return "Start: " + this.startTime + ", Stop: " + this.stopTime + ", started?: " + this.isStarted;
     }
 }
