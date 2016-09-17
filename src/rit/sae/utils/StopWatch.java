@@ -54,6 +54,14 @@ public class StopWatch {
     }
     
     /**
+     * Gets current status of stopwatch
+     * @return has stopwatch started running
+     */
+    public boolean isStarted() {
+        return this.isStarted;
+    }
+    
+    /**
      * Gets start and stop stopwatch values
      * @return String representation of stopwatch
      */
