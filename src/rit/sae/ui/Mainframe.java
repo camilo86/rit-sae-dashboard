@@ -103,6 +103,6 @@ public class Mainframe extends javax.swing.JFrame {
 
 
     public void addLapRow(StopWatch stopWatch) {
-
+        lapModel.addRow(new Object[] {1, stopWatch.getDelta()});
     }
 }
