@@ -14,15 +14,14 @@ import rit.sae.utils.StopWatch;
 public class LaserRecieverListener implements IDataReceiveListener{
     
     private StopWatch stopWatch = new StopWatch();
-    private RitSaeDashboard main = new RitSaeDashboard();
     
     @Override
     public void dataReceived(XBeeMessage xbeeMessage) {
         if(stopWatch.isStarted()) {
             stopWatch.stop();
             System.out.print("\n New Lap: \n" + stopWatch.toString());
-            main.mainFrame.addLapRow(stopWatch);
-            main.mainFrame.updateTable();
+            RitSaeDashboard.frame.addLapRow(stopWatch);
+            RitSaeDashboard.frame.updateTable();
             stopWatch.reset();
             stopWatch.start();
         }else {

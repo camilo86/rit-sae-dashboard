@@ -14,23 +14,33 @@ public class RitSaeDashboard {
     private static final String PORT = "COM3";
     private static final int BAUD_RATE = 9600;
     
-    public Mainframe mainFrame = new Mainframe();
+    public static Mainframe frame;
     
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Mainframe.main(args);
-        XBeeDevice myDevice = new XBeeDevice(PORT, BAUD_RATE);
+        
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                frame = new Mainframe();
+                frame.setVisible(true);
+                
+                XBeeDevice myDevice = new XBeeDevice(PORT, BAUD_RATE);
 		
-        try {
-            myDevice.open();
-            myDevice.addDataListener(new LaserRecieverListener());		
-            System.out.println("\n>> Waiting for data...");
-            
-	} catch (XBeeException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
+                try {
+                    myDevice.open();
+                    myDevice.addDataListener(new LaserRecieverListener());		
+                    System.out.println("\n>> Waiting for data...");
+
+                } catch (XBeeException e) {
+                    e.printStackTrace();
+                    System.exit(1);
+                } 
+            }
+        });
+        
+        Mainframe.main(args);
+        
     }
 }
