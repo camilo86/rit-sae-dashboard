@@ -16,12 +16,15 @@ public class Mainframe extends javax.swing.JFrame {
     
     private DefaultTableModel lapModel = new DefaultTableModel();
     
+    private String[] header = {"lap #", "Time"};
+    
     /**
      * Creates new form Mainframe
      */
     public Mainframe() {
-        lapModel.addColumn("lap #");
-        lapModel.addColumn("Time");
+        //lapModel.addColumn("lap #");
+        //lapModel.addColumn("Time");
+        lapModel.setColumnIdentifiers(header);
         
         initComponents();
         
