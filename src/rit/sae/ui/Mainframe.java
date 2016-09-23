@@ -22,7 +22,10 @@ public class Mainframe extends javax.swing.JFrame {
     public Mainframe() {
         lapModel.addColumn("lap #");
         lapModel.addColumn("Time");
+        
         initComponents();
+        
+        this.jTable1.setModel(lapModel);
     }
     
     /**
@@ -104,5 +107,9 @@ public class Mainframe extends javax.swing.JFrame {
 
     public void addLapRow(StopWatch stopWatch) {
         lapModel.addRow(new Object[] {1, stopWatch.getDelta()});
+    }
+    
+    public void updateTable() {
+        this.jTable1.updateUI();
     }
 }

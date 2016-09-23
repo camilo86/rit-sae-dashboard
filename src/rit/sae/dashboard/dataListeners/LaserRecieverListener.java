@@ -21,6 +21,7 @@ public class LaserRecieverListener implements IDataReceiveListener{
             stopWatch.stop();
             System.out.print("\n New Lap: \n" + stopWatch.toString());
             RitSaeDashboard.mainFrame.addLapRow(stopWatch);
+            RitSaeDashboard.mainFrame.updateTable();
             stopWatch.reset();
             stopWatch.start();
         }else {
