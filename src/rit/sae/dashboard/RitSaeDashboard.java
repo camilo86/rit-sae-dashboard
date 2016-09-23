@@ -14,7 +14,7 @@ public class RitSaeDashboard {
     private static final String PORT = "COM3";
     private static final int BAUD_RATE = 9600;
     
-    public static Mainframe mainFrame = new Mainframe();
+    public Mainframe mainFrame = new Mainframe();
     
     /**
      * @param args the command line arguments
