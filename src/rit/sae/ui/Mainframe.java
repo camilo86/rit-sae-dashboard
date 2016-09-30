@@ -5,7 +5,10 @@
  */
 package rit.sae.ui;
 
+import com.digi.xbee.api.XBeeDevice;
+import com.digi.xbee.api.exceptions.XBeeException;
 import javax.swing.table.DefaultTableModel;
+import rit.sae.dashboard.dataListeners.LaserRecieverListener;
 import rit.sae.utils.StopWatch;
 
 /**
@@ -17,6 +20,10 @@ public class Mainframe extends javax.swing.JFrame {
     private DefaultTableModel lapModel = new DefaultTableModel();
     
     private String[] header = {"lap #", "Time"};
+    
+    private static final String PORT = "COM3";
+    private static final int BAUD_RATE = 9600;
+    public static Mainframe frame;
     
     /**
      * Creates new form Mainframe
@@ -93,11 +100,22 @@ public class Mainframe extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Mainframe.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        frame = new Mainframe();
+        frame.setVisible(true);
+        XBeeDevice myDevice = new XBeeDevice(PORT, BAUD_RATE);
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Mainframe().setVisible(true);
+		
+                try {
+                    myDevice.open();
+                    myDevice.addDataListener(new LaserRecieverListener());		
+                    System.out.println("\n>> Waiting for data...");
+
+                } catch (XBeeException e) {
+                    e.printStackTrace();
+                    System.exit(1);
+                } 
             }
         });
     }
@@ -110,9 +128,5 @@ public class Mainframe extends javax.swing.JFrame {
 
     public void addLapRow(StopWatch stopWatch) {
         lapModel.addRow(new Object[] {1, stopWatch.getDelta()});
-    }
-    
-    public void updateTable() {
-        this.jTable1.updateUI();
     }
 }

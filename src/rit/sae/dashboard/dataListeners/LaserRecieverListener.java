@@ -3,7 +3,6 @@ package rit.sae.dashboard.dataListeners;
 import com.digi.xbee.api.listeners.IDataReceiveListener;
 import com.digi.xbee.api.models.XBeeMessage;
 import java.util.Timer;
-import rit.sae.dashboard.RitSaeDashboard;
 import rit.sae.ui.Mainframe;
 import rit.sae.utils.StopWatch;
 
@@ -20,8 +19,7 @@ public class LaserRecieverListener implements IDataReceiveListener{
         if(stopWatch.isStarted()) {
             stopWatch.stop();
             System.out.print("\n New Lap: \n" + stopWatch.toString());
-            RitSaeDashboard.frame.addLapRow(stopWatch);
-            RitSaeDashboard.frame.updateTable();
+            Mainframe.frame.addLapRow(stopWatch);
             stopWatch.reset();
             stopWatch.start();
         }else {
