@@ -24,6 +24,8 @@ public class Mainframe extends javax.swing.JFrame {
     private static final String PORT = "COM3";
     private static final int BAUD_RATE = 9600;
     public static Mainframe frame;
+    public static XBeeDevice myDevice = new XBeeDevice(PORT, BAUD_RATE);
+    public static LaserRecieverListener listener = new LaserRecieverListener();
     
     /**
      * Creates new form Mainframe
@@ -49,11 +51,20 @@ public class Mainframe extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jTable1.setModel(this.lapModel);
         jScrollPane1.setViewportView(jTable1);
+
+        jButton1.setText("simulate input");
+        jButton1.setActionCommand("record lap");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -62,17 +73,30 @@ public class Mainframe extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(291, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 111, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(81, 81, 81))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 47, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(34, 34, 34))
         );
+
+        jButton1.getAccessibleContext().setAccessibleName("jButton1");
+        jButton1.getAccessibleContext().setAccessibleDescription("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        listener.dataReceived();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -102,25 +126,25 @@ public class Mainframe extends javax.swing.JFrame {
         //</editor-fold>
         frame = new Mainframe();
         frame.setVisible(true);
-        XBeeDevice myDevice = new XBeeDevice(PORT, BAUD_RATE);
+        try {
+            myDevice.open();
+            myDevice.addDataListener(listener);		
+            System.out.println("\n>> Waiting for data...");
+
+        } catch (XBeeException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-		
-                try {
-                    myDevice.open();
-                    myDevice.addDataListener(new LaserRecieverListener());		
-                    System.out.println("\n>> Waiting for data...");
-
-                } catch (XBeeException e) {
-                    e.printStackTrace();
-                    System.exit(1);
-                } 
+                myDevice.readData();
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables

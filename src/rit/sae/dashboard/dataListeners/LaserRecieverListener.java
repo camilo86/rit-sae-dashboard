@@ -26,4 +26,15 @@ public class LaserRecieverListener implements IDataReceiveListener{
             stopWatch.start();
         }
     }
+    public void dataReceived() {
+        if(stopWatch.isStarted()) {
+            stopWatch.stop();
+            System.out.print("\n New Lap: \n" + stopWatch.toString());
+            Mainframe.frame.addLapRow(stopWatch);
+            stopWatch.reset();
+            stopWatch.start();
+        }else {
+            stopWatch.start();
+        }
+    }
 }
