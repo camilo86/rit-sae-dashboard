@@ -7,6 +7,9 @@ package rit.sae.ui;
 
 import com.digi.xbee.api.XBeeDevice;
 import com.digi.xbee.api.exceptions.XBeeException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.table.DefaultTableModel;
 import rit.sae.dashboard.dataListeners.LaserRecieverListener;
 import rit.sae.utils.StopWatch;
@@ -26,6 +29,7 @@ public class Mainframe extends javax.swing.JFrame {
     public static Mainframe frame;
     public static XBeeDevice myDevice = new XBeeDevice(PORT, BAUD_RATE);
     public static LaserRecieverListener listener = new LaserRecieverListener();
+    private static int lapNumber = 1;
     
     /**
      * Creates new form Mainframe
@@ -52,6 +56,8 @@ public class Mainframe extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -66,6 +72,20 @@ public class Mainframe extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setText("calibrate");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("reset");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -74,7 +94,10 @@ public class Mainframe extends javax.swing.JFrame {
                 .addGap(35, 35, 35)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 111, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
                 .addGap(81, 81, 81))
         );
         layout.setVerticalGroup(
@@ -84,6 +107,10 @@ public class Mainframe extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton3)
+                .addGap(42, 42, 42)
+                .addComponent(jButton2)
+                .addGap(85, 85, 85)
                 .addComponent(jButton1)
                 .addGap(34, 34, 34))
         );
@@ -97,6 +124,30 @@ public class Mainframe extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         listener.dataReceived();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            myDevice.open();
+            myDevice.addDataListener(listener);		
+            System.out.println("\n>> Waiting for data...");
+
+        } catch (XBeeException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                myDevice.readData();
+            }
+        });
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        lapNumber = 1;
+        for (int i = lapModel.getRowCount()-1; i >= 0; i--){
+            lapModel.removeRow(i);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -126,31 +177,23 @@ public class Mainframe extends javax.swing.JFrame {
         //</editor-fold>
         frame = new Mainframe();
         frame.setVisible(true);
-        try {
-            myDevice.open();
-            myDevice.addDataListener(listener);		
-            System.out.println("\n>> Waiting for data...");
-
-        } catch (XBeeException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                myDevice.readData();
-            }
-        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 
 
     public void addLapRow(StopWatch stopWatch) {
-        lapModel.addRow(new Object[] {1, stopWatch.getDelta()});
+        Date date = new Date(stopWatch.getDelta());
+        DateFormat formatter = new SimpleDateFormat("mm:ss:SSS");
+        String formatted = formatter.format(date);
+        lapModel.addRow(new Object[] {lapNumber, formatted});
+        lapNumber++;
     }
 }
