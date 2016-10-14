@@ -143,7 +143,7 @@ public class Mainframe extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        lapNumber = 1;
+        lapNumber = 0;
         for (int i = lapModel.getRowCount()-1; i >= 0; i--){
             lapModel.removeRow(i);
         }
@@ -190,10 +190,12 @@ public class Mainframe extends javax.swing.JFrame {
 
 
     public void addLapRow(StopWatch stopWatch) {
-        Date date = new Date(stopWatch.getDelta());
-        DateFormat formatter = new SimpleDateFormat("mm:ss:SSS");
-        String formatted = formatter.format(date);
-        lapModel.addRow(new Object[] {lapNumber, formatted});
+        if (lapNumber > 0){
+            Date date = new Date(stopWatch.getDelta());
+            DateFormat formatter = new SimpleDateFormat("mm:ss:SSS");
+            String formatted = formatter.format(date);
+            lapModel.addRow(new Object[] {lapNumber, formatted});
+        }
         lapNumber++;
     }
 }
